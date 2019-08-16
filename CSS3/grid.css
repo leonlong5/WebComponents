@@ -1,0 +1,40 @@
+/* grid is two dimentional compare to flexbox, it has more control on rows and columns, good for image grids */
+
+.container {
+  display: grid;
+
+  grid-gap: 20px;  /* gaps betwwen colums*/
+
+  /* grid-template-columns: 300px 300px; /* num of coums depend on how many parameters you define here and the width for them*/
+
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* instead of using px or %, we can use fr, means sizes based on fractions you passed in*/
+  /* repeat method used to assign same value here, if we use auto-fill,
+  it will auto stretch while window resize, similar to set image to strech 100% to its container.
+  we can also use minmax to asign minimal maximal sizes */
+
+  grid-template-rows: 1fr;
+
+  /* the items will justify to the left/right or strech(default) of its grid container*/
+  /* justify-items: start; */
+}
+
+.zone {
+  cursor:pointer;
+  display:inline-block;
+  text-align: center;
+  font-size: 10em;
+  border-radius: 4px;
+  border:1px solid #bbb;
+  transition: all 0.3s linear;
+  background-color: lightblue;
+}
+
+.span_2{
+  /* this column will span 2 grids*/
+  grid-column: span 2;
+  /* this item will span 2 rows */
+  grid-row: span 2;
+}
+.zone:hover {
+
+}
