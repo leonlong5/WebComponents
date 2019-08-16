@@ -1,0 +1,37 @@
+<!-- showing how to use form in HTML to send data to backend -->
+<div>
+  <form method="get">
+    <!-- text input -->
+    First Name: <input type="text" name='firstname'><br>
+    Last Name: <input type="text" name='lastname'><br>
+
+    <!-- special input, password, date, email-->
+    Email: <input type="email" name='email'><br>
+    password: <input type='password' name='password'min='5'><br>
+    Birth: <input type='date' name='birth'><br>
+
+    <!-- single selector, use name to group radio buttons, value to store value while submit  -->
+    Gender:<br>
+    <input type="radio" name='gender' value='Male'>Male<br>
+    <input type="radio" name='gender' value='female'>FeMale<br>
+
+    <!-- multiple selector -->
+    Pets: <br>
+    <input type="checkbox" name='cat'>cat<br>
+    <input type="checkbox" name='dog'>dog<br>
+
+    <!-- selector from a list -->
+    cars:<br>
+    <select name='cars'>
+      <option value='volvo'>volvo</option>
+      <option value='toyota'>Toyota</option>
+      <option value='honda'>honda</option>
+    </select>
+
+    <input type="submit" value="Register">
+    <input type="reset">
+  </form>
+</div>
+
+<!-- We can see something like below, after ? mark is parameters, & to seperate parameters
+register.html?firstname=long&lastname=wang&email=long.wang56%40gmail.com&password=12354556&birth=2019-08-15&gender=Male&cat=on&cars=toyota -->
