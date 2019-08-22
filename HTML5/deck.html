@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deck</title>
+  <style>
+        body {
+
+          background-color: black;
+        }
+        #dealCards {
+          margin: auto;
+          display: block;
+          padding: 10px;
+        }
+      .cards {
+        width: 1200px;
+        height: 1000px;
+        margin: auto;
+      }
+
+      .card {
+        display: inline-block;
+        position: relative;
+        width: 190px;
+        height: 300px;
+        margin-right:10px;
+        border:1px solid;
+        border-radius: 5px;
+        background-color: white;
+      }
+
+      .leftTop {
+        position: absolute;
+        left: 15px;
+        top: 15px;
+      }
+
+      .bottomRight {
+        position: absolute;
+        right: 15px;
+        bottom: 15px;
+        transform: rotate(-180deg)
+      }
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <div class="cards">
+      <button id='dealCards'>Deal Cards</button>
+    </div>
+  </div>
+
+<script>
+class Deck {
+  constructor () {
+    this.deck = [];
+    this.dealtDeck = [];
+  }
+
+  generateDeck () {
+    let card = (suit, value) => {
+      let name = value +' '+ suit;
+      return {'name': name, 'suit': suit, 'value': value}
+    }
+    let values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    let suits = ['♣', '♦', '♥', '♠'];
+    for (let s = 0; s < suits.length; s++) {
+      for (let v = 0; v < values.length; v++) {
+        this.deck.push(card(suits[s], values[v]));
+      }
+    }
+  }
+
+  shuffle () {
+    let n = this.deck.length;
+    for (let c = n-1; c >= 0; c--) {
+      let randomIdx = Math.floor(Math.random() * n);
+      while (randomIdx == c) {
+        randomIdx = Math.floor(Math.random() * n);
+      }
+      let temp = this.deck[c];
+      this.deck[c] = this.deck[randomIdx];
+      this.deck[randomIdx] = temp;
+    }
+  }
+
+  deal (n) {
+    let cards = [];
+    for (let i = 0; i < n; i++) {
+      let card = this.deck.shift();
+      cards.push(card);
+      this.dealtDeck.push(card);
+    }
+    return cards;
+  }
+
+  printDeck () {
+    let n = this.deck.length;
+    for (let i = 0; i < n; i++) {
+      console.log(i);
+      console.log(this.deck[i]);
+    }
+  }
+}
+
+function renderCards (cards) {
+    for (let i = 0; i < cards.length; i++) {
+      let card = document.createElement('div');
+      card.classList.add('card');
+      let leftTop = document.createElement('span');
+      let textLeftTop = document.createTextNode(cards[i].name);
+      leftTop.appendChild(textLeftTop);
+      leftTop.classList.add('leftTop');
+      let bottomRight = document.createElement('span');
+      let textBottomRight = document.createTextNode(cards[i].name);
+      bottomRight.appendChild(textBottomRight);
+      bottomRight.classList.add('bottomRight');
+      card.appendChild(leftTop);
+      card.appendChild(bottomRight);
+
+      let cardsContainer = document.getElementsByClassName('cards')[0];
+      cardsContainer.appendChild(card);
+    }
+}
+
+let deck = new Deck();
+deck.generateDeck();
+deck.shuffle();
+deck.printDeck();
+
+let dealButton = document.getElementById('dealCards');
+dealButton.addEventListener('click', function(){
+  let cards = deck.deal(5);
+  renderCards(cards);
+});
+</script>
+</body>
+</html>
