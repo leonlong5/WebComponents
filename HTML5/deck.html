@@ -108,14 +108,15 @@ function renderCards (cards) {
     for (let i = 0; i < cards.length; i++) {
       let card = document.createElement('div');
       card.classList.add('card');
+
       let leftTop = document.createElement('span');
-      let textLeftTop = document.createTextNode(cards[i].name);
-      leftTop.appendChild(textLeftTop);
+      leftTop.appendChild(document.createTextNode(cards[i].name));
       leftTop.classList.add('leftTop');
+
       let bottomRight = document.createElement('span');
-      let textBottomRight = document.createTextNode(cards[i].name);
-      bottomRight.appendChild(textBottomRight);
+      bottomRight.appendChild(document.createTextNode(cards[i].name));
       bottomRight.classList.add('bottomRight');
+
       card.appendChild(leftTop);
       card.appendChild(bottomRight);
 
