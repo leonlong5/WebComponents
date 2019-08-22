@@ -1,7 +1,7 @@
 let taskInput = document.getElementById('new-task');
 let addButton = document.getElementsByTagName('button')[0];
-let incompleteTaskHolder = document.getElementById('incomplete-tasks');
-let completedTaskHolder = document.getElementById('complete-tasks');
+let incompleteTasksHolder = document.getElementById('incomplete-tasks');
+let completedTasksHolder = document.getElementById('completed-tasks');
 
 
 //-----------------------------add todo ----------------------------------//
@@ -49,8 +49,20 @@ var editTask = function () {
 
   var editInput = listItem.querySelector('input[type=text]');
   var label = listItem.querySelector('label');
+  console.log(listItem)
+  //we give li tag a editMode calssName if it is edit mode
+  var containsClass = listItem.classList.contains('editMode');
 
-  
+  if (containsClass) {
+    //switch from .editMode, Make label text become the input's value
+    label.innerText = editInput.value;
+  } else {
+    //Switch to .editMode, input value becomes the label's text
+    editInput.value = label.innerText;
+  }
+
+  //toggle editmode
+  listItem.classList.toggle('editMode');
 }
 
 var deleteTask = function () {
@@ -63,7 +75,7 @@ var deleteTask = function () {
 var taskCompleted = function() {
   //Append the task list item to the #completed-tasks
   var listItem = this.parentNode;
-  completedTaskHolder.appendChild(listItem);
+  completedTasksHolder.appendChild(listItem);
   bindTaskEvents(listItem, taskIncomplete) // bind listItem with incomplete callback
 }
 
@@ -71,7 +83,7 @@ var taskCompleted = function() {
 var taskIncomplete = function() {
   //when checkbox is uncheched, append the list to incomplete
   var listItem = this.parentNode;
-  incompleteTaskHolder.appendChild(listItem);
+  incompleteTasksHolder.appendChild(listItem);
   bindTaskEvents(listItem, taskCompleted);
 }
 
