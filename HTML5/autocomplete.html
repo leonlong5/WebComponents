@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+</head>
+<body>
+  <div id="autocomplete-container">
+    <input type="text" autofocus="true" name="autofocus sample" placeholder="search people" id="autocomplete-input"></input>
+    <ul id="autocomplete-results">
+    </ul>
+  </div>
+
+
+  <script>
+    // variables
+    var input = document.querySelector('input');
+    var autocomplete_results = document.getElementById("autocomplete-results");
+    var people = ['john doe', 'maria', 'paul', 'george', 'jimmy', 'jason' , 'jack'];
+    var results;
+
+    // function to find the people start with
+    function autocomplete(val) {
+      var people_return = [];
+
+      for (i = 0; i < people.length; i++) {
+        if (people[i].startsWith(val)) {
+          people_return.push(people[i]);
+        }
+      }
+
+      return people_return;
+    }
+
+    // events
+    input.onkeyup = function(e) {
+      input_val = this.value; // updates the variable on each ocurrence, this refer to input
+      console.log(input_val)
+      if (input_val.length > 0) {
+        var people_to_show = [];
+
+
+        autocomplete_results.innerHTML = '';
+        people_to_show = autocomplete(input_val);
+        let list_items = '';
+        for (i = 0; i < people_to_show.length; i++) {
+           list_items += '<li>' + people_to_show[i] + '</li>';
+        }
+        autocomplete_results.innerHTML += list_items;
+        autocomplete_results.style.display = 'block';
+      } else {
+        people_to_show = [];
+        autocomplete_results.innerHTML = '';
+      }
+    }
+  </script>
+</body>
+</html>
