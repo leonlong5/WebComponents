@@ -35,20 +35,63 @@ class MyPromise {
   }
 
   then (onFullfilled, onRejected) {
-    const { _value, _status} = this;
-    switch (_status) {
-      case PENDIND:
-        this._fullfilledQueues.push(onFullfilled);
-        this._rejectedQueues.push(onRejected);
-        break
-      case FULFILLED:
-        onFullfilled(_value)
-        break
-      case REJECTED:
-        break
-    }
-    return new MyPromise((onFullfilledNext, onRejectedNext)=>{
-      
+    const {_value, _status} = this;
+    //return a new MyPromise
+    return new Promise((onFulfilledNext, onRejectedNext) => {
+      //fulfilled callback
+      let fulfilled = value => {
+        try {
+            if (!isFunction(onFullfilled)) {
+              onFulfilledNext(value)
+            } else {
+              let res = onFulfilled(value); //get user onFullfilled method returned value, could be a promise or a value
+              if (res instanceof  MyPromise) {
+                //if retuened new promise, we pass the callbacks util the next promise resolved/rejected
+                res.then(onFulfilledNext, onRejectedNext)
+              } else {
+                //if returned somethingelse, pass res into onFulfilledNext
+                onFulfilledNext(res)
+              }
+            }
+        } catch (err) {
+            //if error happend, new returned promise status is rejected
+            onRejectedNext(err)
+        }
+      }
+      //rejected callback
+      let rejected = error => {
+        try {
+          if (!isFunction(onRejected)) {
+            onRejectedNext(error)
+          } else {
+              let res = onRejected(error);
+              if (res instanceof MyPromise) {
+                // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
+                res.then(onFulfilledNext, onRejectedNext)
+              } else {
+                //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
+                onFulfilledNext(res)
+              }
+          }
+        } catch (err) {
+          // 如果函数执行出错，新的Promise对象的状态为失败
+          onRejectedNext(err)
+        }
+      }
+
+      switch (_status) {
+        //while is pending, pass the callback functions into queue
+        case PEDNING:
+          this._fulfilledQueues.push(fulfilled);
+          this._rejectedQueues.push(rejected);
+          break;
+        case FULFILLED:
+          fulfilled(_value);
+          break;
+        case REJECTED:
+          rejected(_value)
+          break;
+      }
     })
   }
 }
