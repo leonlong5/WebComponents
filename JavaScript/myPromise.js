@@ -22,68 +22,84 @@ class MyPromise {
     }
   }
 
+  //when async call resolved or rejected, we popout the callbacks passed with then methods to excute
   _resolve (val) {
-    if (this._status != PENDIND) return;
-    this._status = FULFILLED;
-    this._value = val;
+    if (this._status != PENDING) return;
+    const run = () => {
+        this._status = FULFILLED;
+        this._value = val;
+        let cd;
+        while (cb = this._fulfilledQueues.shift()) {
+          cb(val)
+        }
+    }
+    //call it async
+    setTimeout(()=> run(), 0)
   }
 
   _reject (err) {
     if (this._status != PENDING) return;
-    this._status = REJECTED;
-    this._value = err;
+    const run = () => {
+      this._status =REJECTED;
+      this._value = err
+      let cb;
+      while (cb = this._rejectedQueues.shift()) {
+        cb(err)
+      }
+    }
   }
 
-  then (onFullfilled, onRejected) {
+  then (onFulfilled, onRejected) {
     const {_value, _status} = this;
     //return a new MyPromise
-    return new Promise((onFulfilledNext, onRejectedNext) => {
+    return new Promise((resolveNext, rejectedNext) => {
       //fulfilled callback
       let fulfilled = value => {
         try {
-            if (!isFunction(onFullfilled)) {
-              onFulfilledNext(value)
+            if (!isFunction(onFulfilled)) {
+              resolveNext(value)
             } else {
               let res = onFulfilled(value); //get user onFullfilled method returned value, could be a promise or a value
               if (res instanceof  MyPromise) {
                 //if retuened new promise, we pass the callbacks util the next promise resolved/rejected
-                res.then(onFulfilledNext, onRejectedNext)
+                res.then(resolveNext, rejectedNext)
               } else {
-                //if returned somethingelse, pass res into onFulfilledNext
-                onFulfilledNext(res)
+                //if returned somethingelse, pass res into resolveNext
+                resolveNext(res)
               }
             }
         } catch (err) {
             //if error happend, new returned promise status is rejected
-            onRejectedNext(err)
+            rejectedNext(err)
         }
       }
       //rejected callback
       let rejected = error => {
         try {
           if (!isFunction(onRejected)) {
-            onRejectedNext(error)
+            rejectedNext(error)
           } else {
               let res = onRejected(error);
               if (res instanceof MyPromise) {
-                // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-                res.then(onFulfilledNext, onRejectedNext)
+                // if cur callback returned a new promise, we pass the resolve of promise to it
+                res.then(resolveNext, rejectedNext)
               } else {
-                //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
                 onFulfilledNext(res)
               }
           }
         } catch (err) {
-          // 如果函数执行出错，新的Promise对象的状态为失败
-          onRejectedNext(err)
+          // if any error, cal reject
+          rejectedNext(err)
         }
       }
 
       switch (_status) {
         //while is pending, pass the callback functions into queue
-        case PEDNING:
+        case PENDING :
           this._fulfilledQueues.push(fulfilled);
           this._rejectedQueues.push(rejected);
+
+          console.log('pending', this._fulfilledQueues)
           break;
         case FULFILLED:
           fulfilled(_value);
@@ -95,3 +111,22 @@ class MyPromise {
     })
   }
 }
+
+let promise1 = new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    resolve(123)
+  }, 1000)
+})
+promise2 = promise1.then(res => {
+  // 返回一个普通值
+  console.log(res)
+  return 'return a value'
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+     resolve('这里返回一个Promise')
+    }, 2000)
+  })
+})
+promise2.then(res => {
+  console.log(res) //1秒后打印出：这里返回一个普通值
+})
