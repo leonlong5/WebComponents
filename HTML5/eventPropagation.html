@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+  <style>
+    body {
+    margin: 20px 0 0;
+    background-color: #f3f3f3;
+    color: #9a9796;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: monospace;
+    font-size: 13px;
+    }
+    body > * {
+    flex: 0 0 auto;
+    }
+    body > *:first-child {
+    margin-right: 20px;
+    }
+    .box {
+    display: inline-block;
+    font-size: 0;
+    padding: 40px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    position: relative;
+    }
+    .box .inner {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    }
+    .box::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 14px;
+    color: #000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    }
+    body > .box {
+    background-color: #bbb;
+    }
+    body > .box::after {
+    content: 'b0';
+    opacity: 1;
+    }
+    body > .box > .box:hover {
+    background-color: #c8c8c8;
+    }
+    body > .box > .box:hover::after {
+    content: 'b1';
+    opacity: 1;
+    }
+    body > .box > .box:hover > .box:hover {
+    background-color: #d5d5d5;
+    }
+    body > .box > .box:hover > .box:hover::after {
+    content: 'b2';
+    opacity: 1;
+    }
+    body > .box > .box:hover > .box:hover > .box:hover {
+    background-color: #e1e1e1;
+    }
+    body > .box > .box:hover > .box:hover > .box:hover::after {
+    content: 'b3';
+    opacity: 1;
+    }
+    body > .box > .box:hover > .box:hover > .box:hover > .box:hover {
+    background-color: #eee;
+    }
+    body > .box > .box:hover > .box:hover > .box:hover > .box:hover::after {
+    content: 'b4';
+    opacity: 1;
+    }
+    table {
+    border-collapse: collapse;
+    }
+    table th, table td {
+    padding: 5px;
+    }
+    table th {
+    padding-top: 0;
+    text-align: left;
+    }
+    table.empty tbody > tr:first-child {
+    text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="b0" class="box">
+      <div id="b1"  class="box">
+          <div id="b2" class="box">
+              <div id="b3" class="box">
+                  <div id="b4" class="box inner">
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <table class="empty">
+      <thead>
+          <tr>
+              <th>target</th>
+              <th>phase</th>
+              <th>currentTarget</th>
+              <th>this</th>
+              <th>listener</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td colspan="5">Click on the boxes!</td>
+          </tr>
+      </tbody>
+  </table>
+
+  <script>
+  var
+  table = document.querySelector('table'),
+  tbody = table.querySelector('tbody')
+;
+
+addEventListeners();
+
+function addEventListeners() {
+  window.addEventListener('click', clearLog, true);
+
+  var innerBox = document.querySelector('.box.inner');
+
+  var n = innerBox;
+  while (n) {
+      n.addEventListener('click', listener('c1'), true);
+      n.addEventListener('click', listener('c2'), true);
+      n.addEventListener('click', listener('b1'));
+      n.addEventListener('click', listener('b2'));
+
+      n = n.parentNode;
+  }
+  window.addEventListener('click', listener('c1'), true);
+  window.addEventListener('click', listener('c2'), true);
+  window.addEventListener('click', listener('b1'));
+  window.addEventListener('click', listener('b2'));
+}
+
+function listener(id) {
+  return function(e) {
+      log(e.eventPhase, e.currentTarget, this, e.target, id);
+  }
+}
+
+function log(phase, currentTarget, _this, target, id) {
+  var row = document.createElement('tr');
+
+  td = document.createElement('td');
+  td.innerHTML = formatNode(target);
+  row.appendChild(td);
+
+  switch (phase) {
+      case Event.CAPTURING_PHASE:
+          phase = 'capturing';
+          break;
+      case Event.AT_TARGET:
+          phase = 'at target';
+          break;
+      case Event.BUBBLING_PHASE:
+          phase = 'bubbling';
+          break;
+  }
+  var td = document.createElement('td');
+  td.innerHTML = phase;
+  row.appendChild(td);
+
+  td = document.createElement('td');
+  td.innerHTML = formatNode(currentTarget);
+  row.appendChild(td);
+
+  td = document.createElement('td');
+  td.innerHTML = formatNode(_this);
+  row.appendChild(td);
+
+  td = document.createElement('td');
+  td.innerHTML = id;
+  row.appendChild(td);
+
+  tbody.appendChild(row);
+}
+
+function formatNode(n) {
+  var out;
+
+  if (n == window)
+      out = 'window';
+  else {
+      out = n.nodeName.toLowerCase();
+      if (n.id)
+          out += '#' + n.id;
+  }
+
+  return out;
+}
+
+function clearLog() {
+  tbody.innerHTML = '';
+  table.classList.remove('empty');
+}
+  </script>
+</body>
+</html>
