@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Users</title>
+  <style>
+    body {
+      background: #161616;
+      color: #bdbdbd;
+      font-weight: 300;
+      height: 100vh;
+      margin: 0;
+      font-family: Helvetica neue, roboto;
+    }
+  </style>
+</head>
+<body>
+  <div id="content" >
+      <a class="link" href="profile.jsp?id=1" >Bill Denbrough</a>
+
+  </div>
+  <script>
+  //For the given array of members:
+      var members = [
+        {
+            name: 'Bill Denbrough',
+            id: 1
+        },
+        {
+            name: 'Ben Hanscom',
+            id: 2
+        },
+        {
+            name: 'Mike Hanlon',
+            id: 3
+        },
+        {
+            name: 'Richie Tozier',
+            id: 4
+        },
+        {
+            name: 'Beverly Marsh',
+            id: 5
+        },
+        {
+            name: 'Eddie Kaspbrak',
+            id: 6
+        },
+        {
+            name: 'Stan Uris',
+            id: 7
+        }
+      ];
+
+      let container = document.querySelector('#content')
+
+      let aList = ''
+      for (let i = 0; i < members.length; i++) {
+      let name = members[i].name;
+      let id = members[i].id;
+      aList += `<a class='link' href= 'profile.jsp?id=${id}'>${name}</a><br/>`
+      }
+      console.log(container)
+      container.innerHTML = aList;
+  </script>
+</body>
+</html>
