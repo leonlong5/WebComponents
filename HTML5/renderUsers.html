@@ -55,9 +55,9 @@
 
       let aList = ''
       for (let i = 0; i < members.length; i++) {
-      let name = members[i].name;
-      let id = members[i].id;
-      aList += `<a class='link' href= 'profile.jsp?id=${id}'>${name}</a><br/>`
+        let name = members[i].name;
+        let id = members[i].id;
+        aList += `<a class='link' href= 'profile.jsp?id=${id}'>${name}</a><br/>`
       }
       console.log(container)
       container.innerHTML = aList;
