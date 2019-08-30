@@ -34,7 +34,8 @@ let createNewTaskElement = function(taskString) {
 
 let addTask = function() {
   let listItem = createNewTaskElement(taskInput.value);
-  incompleteTaskHolder.appendChild(listItem);
+  incompleteTasksHolder.appendChild(listItem);
+  bindTaskEvents(listItem, taskCompleted)
   taskInput.value = '';
 }
 
