@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Like Widget</title>
+  <style>
+    section{
+        width: 50%;
+        margin: 50px auto;
+    }
+    .like{
+      border-radius: 5px;
+      padding: 5px 10px;
+    }
+    .liked {
+      background-color: lightskyblue;
+    }
+    .count {
+
+    }
+  </style>
+</head>
+<body>
+  <header>header</header>
+  <section>
+    <button class='like'>Like</button>
+    <span class='count'>0</span>
+  </section>
+  <footer>footer</footer>
+
+  <script>
+    let count = 12;
+    let likeBtn = document.querySelector('.like')
+    let countContainer = document.querySelector('.count')
+
+    countContainer.innerText = count
+    likeBtn.addEventListener('click', ()=>{
+      if (likeBtn.classList.contains('liked')){
+        likeBtn.classList.remove('liked')
+        count--;
+      } else {
+        likeBtn.classList.add('liked')
+        count++;
+      }
+      countContainer.innerText = count
+    })
+  </script>
+</body>
+</html>
