@@ -52,7 +52,7 @@
       ];
 
       let container = document.querySelector('#content')
-
+      //one way to render
       let aList = ''
       for (let i = 0; i < members.length; i++) {
         let name = members[i].name;
@@ -61,6 +61,17 @@
       }
       console.log(container)
       container.innerHTML = aList;
+
+      //another way to render
+      for (let i = 0; i < members.length; i++) {
+        let name = members[i].name;
+        let id = members[i].id;
+        let a = document.createElement('a');
+        a.appendChild(document.createTextNode(name))
+        a.setAttribute('class', 'link');
+        a.setAttribute('href', `profile.jsp?id=${id}`)
+        container.appendChild(a)
+      }
   </script>
 </body>
 </html>
