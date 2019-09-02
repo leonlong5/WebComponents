@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Users</title>
+  <style>
+      body {
+        background: #161616;
+        color: #bdbdbd;
+        font-weight: 300;
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-family: Helvetica neue, roboto;
+      }
+
+      img {
+        width: 56px;
+        height: 48px;
+      }
+
+      h1 {
+        font-weight: 200;
+        font-style: 26px;
+        margin: 10px;
+      }
+
+      input{
+        width: 40px;
+        margin-top: 5px;
+        margin-left:0;
+
+      }
+  </style>
+</head>
+<body>
+  <div id="content" >
+  <section>
+      <div id='screen'></div>
+
+      <div class='keyboard'>
+      <input type="button" id="one" value=1>
+      <input type="button" id="two" value=2>
+      <input type="button" id="three" value=3>
+      <input type="button" id="four" value=4>
+      <input type="button" id="five" value=5>
+      <input type="button" id="six" value=6>
+      <input type="button" id="seven" value=7>
+      <input type="button" id="eight" value=8>
+      <input type="button" id="nine" value=9>
+      <input type="button" id="zero" value=0>
+      <input type="button" id="plus" value="+">
+      <input type="button" id="equal" value="=">
+      </div>
+  </section>
+  </div>
+  <script>
+      let screen = document.getElementById('screen');
+      let list = document.querySelector('.keyboard').children;
+      let stack = [];
+      let num = 0;
+      screen.innerText = num;
+      for (let i = 0; i < list.length; i++) {
+        bindEvent(list[i], i+1)
+      }
+
+
+      function bindEvent(node, index) {
+        console.log(index)
+        let value = 0
+        if (1 <= index && index <= 9) {
+          value = index
+          node.addEventListener('click', ()=>{
+            num = num*10 + value;
+            screen.innerText = num
+          })
+        }
+        if (index == 11) {
+          node.addEventListener('click', ()=>{
+            stack.push(num);
+            num = 0
+            screen.innerText = "+"
+          })
+
+        }
+        if (index == 12) {
+          node.addEventListener('click', ()=>{
+            let sum = num
+            while (stack.length != 0) {
+              sum += stack.pop()
+            }
+            screen.innerText = sum;
+          })
+
+        }
+      }
+  </script>
+</body>
+</html>
