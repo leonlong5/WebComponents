@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>debounce</title>
+  <style>
+      input{
+        display: block;
+        margin: 20px auto;
+        height: 40px;
+        line-height: 40px;
+        font-size:35px;
+      }
+      #output{
+          width:400px;
+          margin:20px auto;
+          
+      }
+  </style>
+</head>
+<body>
+  <input id='userinput' type="text" name="search" value="" aria-label="">
+  <div id='output'></div>
+  <script>
+    window.onload = function() {
+      // 1、get dome elements
+      var myDebounce = document.getElementById("userinput");
+      var countContainer = document.getElementById('output');
+      var inputStr = '';
+      myDebounce.addEventListener("keyup", debounce(sayDebounce));
+    }
+
+    // 2、debounce function
+    function debounce(fn) {
+      // 4、set a timer
+      var timeout = null;
+      return function(e) {
+        // 5、every time user input a new char within 1000 minseconds, reset the timer
+        clearTimeout(timeout);
+        // 6、create a new timer
+        timeout = setTimeout(() => {
+          fn.call(this, e.target.value);
+        }, 1000);
+      };
+    }
+
+    // 7、debounce callback
+    function sayDebounce(value) {
+      var countContainer = document.getElementById('output');
+      let node = document.createElement('p');
+      node.appendChild(document.createTextNode(value))
+      countContainer.appendChild(node)
+    }
+
+  </script>
+</body>
+</html>
