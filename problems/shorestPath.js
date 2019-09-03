@@ -40,3 +40,45 @@ function shorestDis(x1, y1, x2, y2) {
 console.log(shorestDis(0,0,0,3))
 
 console.log(shorestDis(1,1,1,3))
+
+
+
+
+//find all points within x radius
+let Map = [ [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]];
+function findAllPoints(radius, x, y) {
+    let queue = [[x, y, 0]];
+    let visited = {};
+    let res = [];
+    while (queue.length != 0) {
+      let n = queue.length;
+
+      for (let i = 0; i < n; i++) {
+        let [x1, y1, dis] = queue.shift();
+        visited[x1.toString()+y1.toString()] = true
+        if (dis >= radius) {
+          return res;
+        }
+
+
+        for (let dir of [[0,1], [0, -1], [1, 0], [-1, 0]]){
+          let newX = x1 + dir[0]
+          let newY = y1 + dir[1]
+          let key = newX.toString()+newY.toString();
+          let n = Map.length;
+          let m = Map[0].length;
+          if (0 <= newX && newX < n && 0 <= newY && newY < m && !(key in visited)){
+            res.push(key)
+            visited[key] = true
+            queue.push([newX, newY, dis+1])
+          }
+        }
+      }
+    }
+    return res
+}
+
+console.log(findAllPoints(1, 1, 1))
