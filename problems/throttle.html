@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>throttle</title>
+  <style>
+    body {
+      height: 1000px;
+    }
+    #count{
+      width: 100px;
+      height:40px;
+      font-size: 30px;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+
+  <div id='count'></div>
+
+  <script>
+    document.addEventListener('scroll', throttle(sayThrottle))
+
+    let count = 0;
+    // 2、throttle function
+    function throttle(fn) {
+      // 4、save a canRan with closure
+      let canRun = true;
+      return function() {
+        // 5、check if canRan is True, otherwise return imediately, so it won't excute the callback
+        if(!canRun) {
+          return;
+        }
+        // 6、set canRun to false in case been excuate again
+        canRun = false;
+        // 7、timer
+        setTimeout( () => {
+          fn.call(this, arguments);
+          // 8、after finish excution, reset canRun
+          canRun = true;
+        }, 1000);
+      };
+    }
+
+    // 3. callback need throttle
+    function sayThrottle() {
+      console.log("you're at the bottom of the page")
+      let countContainer = document.getElementById('count');
+      count++;
+      console.log(count)
+      countContainer.innerText = count;
+    }
+
+  </script>
+</body>
+</html>
