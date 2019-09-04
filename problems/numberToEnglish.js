@@ -2,7 +2,8 @@ function numberToWrods(num) {
   if (num == 0) {
     return 'Zero'
   }
-
+  let floats = (num%1).toFixed(2);
+  num = Math.floor(num)
   let to19 = ' One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen'.split(' ')
   let tens = '_ _ Twenty Thirty Forty Fifty Sixty Seventy Eighty Ninety'.split(" ");
 

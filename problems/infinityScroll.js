@@ -31,6 +31,24 @@ function loadMore() {
   listElm.appendChild(frag)
 }
 
+function loadMoreUser() {
+
+  let frag = document.createDocumentFragment();
+
+  for(let i = 0; i <10; i ++){
+      fetch('https://randomuser.me/api/').then((response)=>{
+          return response.json();
+      }).then((data)=>{
+          console.log(data.results[0])
+          let item = document.createElement('li')
+            item.innerText = data.results[0].email
+            listElm.appendChild(item)
+      })
+  }
+
+  //listElm.appendChild(frag)
+}
+
 
 
 
