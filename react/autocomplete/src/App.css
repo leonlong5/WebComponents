@@ -51,7 +51,7 @@ li:nth-child(odd) {
 li:hover {
   background-color: #999;
 }
-li::selection {
+li.selected {
   background-color: #999;
 }
 

@@ -10,7 +10,24 @@ class Autocomplete extends React.Component{
         }
     }
     handleKeyPress (e) {
-        console.log('KeyPress: ' + e.target.value)
+        // eslint-disable-next-line default-case
+        switch(e.key) {
+            case 'ArrowUp':
+                if (this.state.selectedIndex - 1 < 0) break;
+                return this.setState({ selectedIndex: this.state.selectedIndex - 1})
+            case 'ArrowDown':
+                if (this.state.selectedIndex + 1 > this.state.suggestions.length) break;
+                return this.setState({ selectedIndex: this.state.selectedIndex + 1})
+            case 'Escape':
+                return this.setState({ areSuggestionsVisiable: false})
+            case 'Backspace':
+                break;
+            case 'Enter':
+                return this.setState({
+                    selectedValue: this.state.suggestions[this.state.selectedIndex],
+                    areSuggestionsVisiable: false
+                })
+        }
     }
 
     fetchData () {
