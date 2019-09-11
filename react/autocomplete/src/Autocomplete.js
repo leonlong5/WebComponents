@@ -9,8 +9,8 @@ class Autocomplete extends React.Component{
             areSuggestionsVisiable: false
         }
     }
-    handleKeyPress () {
-
+    handleKeyPress (e) {
+        console.log('KeyPress: ' + e.target.value)
     }
 
     fetchData () {
@@ -31,7 +31,7 @@ class Autocomplete extends React.Component{
             this.setState({
                 suggestions: [
                     'Jack', 'Jason', "John", "Joy", "Jackson", "Josh"
-                ].filter(i => i.indexOf(this.state.query) !== -1), //use query to filter out
+                ].filter(sugesstion => sugesstion.startsWith(this.state.query)), //use query to filter out
                 areSuggestionsVisiable: true,
                 selectedIndex: 0
             })
@@ -39,18 +39,16 @@ class Autocomplete extends React.Component{
     }
 
     handleInputchange (e) {
-        const query = e.value;
-        this.setState({ query }, () => {
-            this.fetchData()
-        })
+        const query = e.target.value;
+        //we need to use an updater call back here to fetch data
+        //because we need query to beupdated before fetchData been triggered
+        this.setState({ query }, ()=>this.fetchData())
     }
 
     render() {
         return (
-            <div>
-                {this.state.selectedValue ? 
-                 <p>Slected Value: {this.state.selectedValue}</p> : null}
-
+            <div className='container'>
+                
                 <input
                     type='text'
                     onKeyUp={this.handleKeyPress.bind(this)} 
@@ -59,25 +57,25 @@ class Autocomplete extends React.Component{
 
                 { (this.state.areSuggestionsVisiable && this.state.suggestions.length) ?
                     
-                    <div calssName='suggestions'>
+                    <div className='suggestions'>
                         <ul>
                             {this.state.suggestions.map((item, i)=>{
                                 return <li
                                         key={i}
                                         className={i === this.state.selectedIndex ? 'selected' : ''}
-                                        onClick={()=>{ 
-                                            this.setState({
-                                                selectedValue: {item},
+                                        onClick={()=> this.setState({
+                                                selectedValue: item,
                                                 areSuggestionsVisiable:false
-                                            }) 
-                                        }}
+                                        })}
                                         >
                                             {item}
                                         </li>
                             })}
                         </ul>
-
                 </div> : null}
+
+                {this.state.selectedValue ? 
+                 <p className='selectedValue'>Slected Value: {this.state.selectedValue}</p> : null}
             </div>
         )
     }
