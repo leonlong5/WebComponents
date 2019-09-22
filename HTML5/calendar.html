@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calendar</title>
+  <style>
+    table {
+    border-collapse: collapse;
+  }
+
+  table, th, td {
+    border: 1px solid black;
+  }</style>
+</head>
+<body>
+      <sction id='calendar-section'>
+        <div id='calendar'></div>
+      </section>
+      <script type="text/javascript">
+        const container = document.querySelector('#calendar');
+        const calendarSection = document.querySelector('#calendar-section')
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = date.getMonth(); // month start from 0
+
+        function getCurMonthDates(year, month){
+          let dates = [];
+
+          //get the day of first date in cur month, 0 is sunday, so this num also tell us how many dates we need preappend
+          let numOfDaysPrevNeeded = new Date(year, month).getDay();
+          let numOfDatesPrev = 32 - new Date(year, month, 32).getDate();
+
+          for (let i = 0; i < numOfDaysPrevNeeded; i++) { //append prev month dates
+            dates.unshift(numOfDatesPrev--)
+          }
+
+          //pass 32 as parameter will return the 32nd day from the first day of that month
+          //we know no month has 32 days, so use 32 minus cur date will get num of dates for cur month
+          let numOfDates = 32 - new Date(year, month, 32).getDate();
+          //append cur month dates
+          for (let i = 1; i <= numOfDates; i++) {
+            dates.push(i)
+          }
+
+          //append dates after last day of cur month
+          let numOfDatesAfter = 42 - numOfDaysPrevNeeded - numOfDates;  //dates append after cur last date
+          for (let i = 1; i <= numOfDatesAfter; i++){
+            dates.push(i)
+          }
+          return dates
+        }
+
+        function renderMonth(dates) {
+          header.appendChild(buttonPrev)
+          header.appendChild(span)
+          header.appendChild(buttonNext)
+
+          let table = document.createElement('table')
+          table.id = 'table'
+          //header part
+          let thead = document.createElement('thead')
+          let days = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+          for (let i = 0; i < days.length; i++) {
+            let th = document.createElement('th')
+            th.appendChild(document.createTextNode(days[i]))
+            thead.append(th)
+          }
+          table.append(thead)
+
+          //body part
+          let tbody = document.createElement('tbody')
+          while (dates.length > 0){
+            let tr = document.createElement('tr');
+            for (let j = 0; j < 7; j++) {
+              let td = document.createElement('td')
+              td.appendChild(document.createTextNode(dates.shift()))
+              tr.appendChild(td)
+            }
+            tbody.appendChild(tr)
+          }
+          table.appendChild(tbody)
+          container.innerHTML = '';
+          container.appendChild(table)
+        }
+
+          //header
+          let header = document.createElement('div')
+          let buttonPrev = document.createElement('button')
+          let buttonNext = document.createElement('button')
+          let span = document.createElement('span')
+          span.id = 'yearmonth'
+
+          buttonPrev.id = 'prev';
+          buttonNext.id = 'next';
+          span.innerText = year + '/' + month
+          buttonPrev.innerText = '<'
+          buttonNext.innerText = '>'
+          calendarSection.insertBefore(header, calendarSection.childNodes[0])
+
+        data = getCurMonthDates(year, month)
+        renderMonth(data, year, month)
+        bindPrev(buttonPrev)
+        bindNext(buttonNext)
+
+        function bindPrev(buttonPrev){
+          buttonPrev.addEventListener('click', ()=>{
+              month--;
+              data = getCurMonthDates(year, month)
+              renderMonth(data)
+              let yearmonth = document.querySelector('#yearmonth');
+              yearmonth.innerHTML = year +'/' + month
+          })
+        }
+
+        function bindNext(buttonNext){
+            buttonNext.addEventListener('click', ()=>{
+              month++;
+              data = getCurMonthDates(year, month)
+              renderMonth(data)
+              let yearmonth = document.querySelector('#yearmonth');
+              yearmonth.innerHTML = year +'/' + month
+          })
+        }
+      </script>
+</body>
+</html>
